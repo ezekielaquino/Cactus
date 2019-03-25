@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css?family=Concert+One|Varela+Round|Oleo+Script');
+
+html {
+  background-color: #ececec;
+}
+
+body {
+  font-family: 'Varela Round', 'Arial', sans-serif;
+  color: #333;
+  -webkit-font-smoothing: antialiased;
+}
+
+input {
+  color: inherit;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Concert One';
+  font-size: 1.12rem;
+}
+
+textarea {
+  line-height: 1.2;
+  color: #555;
+}
