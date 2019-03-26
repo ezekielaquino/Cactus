@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "Cactus",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "A little web app to compose summarioes",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Ezekiel Aquino <ezekielaquino@gmail.com>",
   "dependencies": {
     "@emotion/core": "^10.0.9",
     "@emotion/styled": "^10.0.9",
@@ -33,7 +33,7 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "yarn && gatsby build",
+    "build": "yarn && rm -rf public && gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write src/**/*.{js,jsx}",
     "start": "npm run develop",
