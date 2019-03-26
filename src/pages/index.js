@@ -46,7 +46,7 @@ function App() {
     return items.reduce((res, item, index) => {
       const { emoji, title, body } = item;
       const spacer = index !== 0 ? '\n\n' : '';
-      const chunk = `${spacer}*${ emoji ? `${emoji} ` : '' }${ title }*\n${ body }
+      const chunk = `${spacer}*${ emoji ? `${emoji} ` : '' }${ title }*\n${ body || '' }
       `;
 
       return res += chunk;
