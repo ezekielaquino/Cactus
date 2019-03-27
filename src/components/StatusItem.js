@@ -134,7 +134,10 @@ const Input = styled.input`
 
 const InputTitle = styled(Input)`
   font-family: 'Concert One';
-  font-size: 1.12rem;
+  
+  @media (min-width: 800px) {
+    font-size: 1.12rem;
+  }
 `;
 
 const Delete = styled.button`

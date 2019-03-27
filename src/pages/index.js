@@ -191,6 +191,7 @@ const Main = styled.main`
 
   @media (max-width: 800px) {
     padding: 30px;
+    padding-bottom: 35vh;
   }
 `;
 
@@ -198,10 +199,6 @@ const Wrap = styled.div`
   @media (min-width: 800px) {
     display: flex;
     justify-content: space-between;
-  }
-
-  @media (max-width: 800px) {
-    padding-bottom: calc(40vh + 30px);
   }
 `;
 
@@ -256,7 +253,7 @@ const ColumnRight = styled(Column)`
 
   @media (max-width: 800px) {
     width: 100%;
-    height: 35vh;
+    height: 30vh;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -307,7 +304,10 @@ const Headline = styled.input`
   border-radius: 8px;
   margin-bottom: 15px;
   font-family: 'Concert One';
-  font-size: 1.2rem;
+  
+  @media (min-width: 800px) {
+    font-size: 1.12rem;
+  }
 `;
 
 const Clipboard = styled.textarea`

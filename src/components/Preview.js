@@ -99,6 +99,10 @@ const ResultWrap = styled.div`
   &:hover .prompt {
     opacity: 1;
   }
+
+  @media (max-width: 800px) {
+    padding-top: 30px;
+  }
 `;
 
 const PreviewItem = styled.li`
@@ -142,6 +146,13 @@ const Fineprint = styled.span`
   color: #999;
   display: block;
   padding-top: 10px;
+
+  @media (max-width: 800px) {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 10px;
+  }
 `;
 
 Preview.propTypes = propTypes;
