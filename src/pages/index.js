@@ -45,7 +45,7 @@ function App() {
   const formatResult = items => {
     return items.reduce((res, item, index) => {
       const { emoji, title, body } = item;
-      const spacer = index !== 0 ? '\n\n' : '';
+      const spacer = index !== 0 ? '\n' : '';
       const chunk = `${spacer}*${ emoji ? `${emoji} ` : '' }${ title }*${ body ? `\n${body}` : '' }
       `;
 
@@ -110,7 +110,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    setResult(formatResult(statusItems));
+    setResult(formatResult(statusItems).trim());
   }, [ statusItems ]);
 
   return (
