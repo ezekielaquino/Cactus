@@ -185,15 +185,29 @@ const dance = keyframes`
 `;
 
 const Main = styled.main`
-  padding: 60px;
+  @media (min-width: 800px) {
+    padding: 60px;
+  }
+
+  @media (max-width: 800px) {
+    padding: 30px;
+  }
 `;
 
 const Wrap = styled.div`
-  display: flex;
-  justify-content: space-between;
+  @media (min-width: 800px) {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 800px) {
+    padding-bottom: calc(40vh + 30px);
+  }
 `;
 
-const Header = styled(Wrap)`
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
   padding-bottom: 5px;
   display: block;
   background-color: #ececec;
@@ -223,7 +237,9 @@ const Header = styled(Wrap)`
 `;
 
 const Column = styled.div`
-  width: calc(50% - 15px);
+  @media (min-width: 800px) {
+    width: calc(50% - 15px);
+  }
 
   footer {
     display: flex;
@@ -232,9 +248,22 @@ const Column = styled.div`
 `;
 
 const ColumnRight = styled(Column)`
-  max-height: calc(100vh - 75px);
-  position: sticky;
-  top: 35px;
+  @media (min-width: 800px) {
+    max-height: calc(100vh - 75px);
+    position: sticky;
+    top: 35px;
+  }
+
+  @media (max-width: 800px) {
+    width: 100%;
+    height: 35vh;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #fbfbfb;
+    box-shadow: 0px -5px 8px rgba(0, 0, 0, 0.03);
+    padding: 15px;
+  }
 `;
 
 const AddButton = styled.button`
