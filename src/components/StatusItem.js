@@ -28,15 +28,8 @@ function StatusItem(props) {
   const bodyRef = useRef();
 
   const handleChange = (e, args) => {
-    let key, value;
-
-    if (!args) {
-      key = e.target.name;
-      value = e.target.value;
-    } else {
-      key = args.key;
-      value = args.value;
-    }
+    const key = args ? args.key : e.target.name;
+    const value = args ? args.value : e.target.value;
 
     if (e && e.target.name === 'body') {
       setBodyHeight(bodyRef.current.scrollHeight);
@@ -51,7 +44,9 @@ function StatusItem(props) {
   }
 
   return (
-    <Draggable draggableId={`draggable-${index}`} index={index}>
+    <Draggable
+      draggableId={`draggable-${index}`}
+      index={index}>
       {provided => (
         <Wrap
           {...provided.draggableProps}

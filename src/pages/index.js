@@ -1,18 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { keyframes } from 'emotion';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { playPop } from '../components/Pop';
 import styled from '@emotion/styled';
 import StatusItem from '../components/StatusItem';
 import Preview from '../components/Preview';
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { playPop } from '../components/Pop';
 import '../components/reset.css';
 import '../components/base.css';
 
 
 const initialEmojis = ['🐶', '🐣', '🌸', '🌈', '️🐹', '🦖', '🍒', '🍑', '🥝' , '🍰'];
-const getInitialEmoji = () => {
-  return initialEmojis.splice(Math.floor(Math.random() * initialEmojis.length), 1);
-};
+const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * initialEmojis.length), 1);
 const initialEmoji = getInitialEmoji();
 
 function App() {
@@ -20,8 +18,10 @@ function App() {
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
   const [ headline, setHeadline ] = useState('A quick summary...');
-  const gifSrc = 'https://media.giphy.com/media/3ohc0WUqyvkVmFyZxe/giphy.mp4';
   const clipboardRef = useRef();
+  const cactusImg = 'https://www.nicepng.com/png/detail/110-1106868_tumblr-cactus-png-cute-cactus.png';
+  // Previously, this was randomized via giphy api, but is very rate limiated
+  const gifSrc = 'https://media.giphy.com/media/3ohc0WUqyvkVmFyZxe/giphy.mp4';
 
   const handleAdd = () => {
     const items = [...statusItems];
@@ -31,23 +31,14 @@ function App() {
     setStatusItems(items);
   };
 
-  // MEH, We can random get a new gif BUT giphy is so rate limited its not even worth it
-  // const getGif = () => {
-    // fetch('http://api.giphy.com/v1/gifs/random?tag=nice&api_key=s0L9mFeGgAEiu0ohDrNedg0iVzewrrMv') 
-    //   .then(r => r.status === 200 && r.json())
-    //   .then(r => {
-    //     if (r.data) {
-    //       setGifSrc(r.data.image_mp4_url);
-    //     }
-    //   });
-  // };
-
   const formatResult = items => {
     return items.reduce((res, item, index) => {
       const { emoji, title, body } = item;
       const spacer = index !== 0 ? '\n' : '';
-      const chunk = `${spacer}*${ emoji ? `${emoji} ` : '' }${ title }*${ body ? `\n${body}` : '' }
-      `;
+      const emojiString = emoji ? `${emoji} ` : '';
+      const headerString = `*${emojiString}${title}*`;
+      const bodyString = body ? `\n${body}` : '';
+      const chunk = `${spacer}${headerString}${bodyString}`;
 
       return res += chunk;
     }, `${headline ? `*${headline}*\n\n` : ''}`);
@@ -72,7 +63,6 @@ function App() {
 
     setTimeout(() => {
       setCopied(false);
-      // getGif();
     }, 3000);
   };
 
@@ -98,8 +88,6 @@ function App() {
   };
 
   useEffect(() => {
-    // getGif();
-
     window.addEventListener('keyup', function(e){
       const isMeta = e.metaKey || e.ctrlKey;
 
@@ -116,7 +104,7 @@ function App() {
   return (
     <Main>
       <Header>
-        <img alt="Cactus" src="https://www.nicepng.com/png/detail/110-1106868_tumblr-cactus-png-cute-cactus.png" />
+        <img alt="Cactus" src={cactusImg} />
       </Header>
 
       <Wrap>
@@ -183,10 +171,10 @@ function App() {
 }
 
 const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
+  const result = [...list];
   const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
 
+  result.splice(endIndex, 0, removed);
   return result;
 };
 

@@ -145,4 +145,5 @@ const Fineprint = styled.span`
 
 Preview.propTypes = propTypes;
 
+
 export default Preview;
