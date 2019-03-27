@@ -19,10 +19,11 @@ A little app for making summaries/lists for posting on slack or some other markd
 ![Cactus output on slack](https://i.imgur.com/cQAIhkY.png)
 
 ---
-## Dreams and aspiration ✨
+## Dreams and aspirations ✨
 
 - [ ] Slack integration
 - [ ] Dark mode lol
 - [ ] Mobile version
+- [ ] Get to a $300m valuation and actually exit for $1.3b
 
 [🌈 Use the App now 🕊](https://cactus-app.netlify.com/)
