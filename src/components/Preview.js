@@ -80,6 +80,7 @@ const ResultWrap = styled.div`
   border-radius: 8px;
   padding: 15px;
   cursor: pointer;
+  overflow-x:hidden;
   overflow-y: auto;
 
   h3 {
