@@ -33,7 +33,7 @@ function App() {
 
   const formatResult = items => {
     return items.reduce((res, item, index) => {
-      const { emoji, title, body } = item;
+      const { emoji, title = '', body = '' } = item;
       const spacer = index !== 0 ? '\n' : '';
       const emojiString = emoji ? `${emoji} ` : '';
       const headerString = `*${emojiString}${title}*`;
