@@ -113,6 +113,7 @@ function App() {
             type="text"
             placeholder="Your headline"
             value={headline}
+            onClick={e => e.currentTarget.select()}
             onChange={e => setHeadline(e.target.value)} />
           
           <DragDropContext onDragEnd={handleDragEnd}>
