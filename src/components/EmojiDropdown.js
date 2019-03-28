@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import 'emoji-mart/css/emoji-mart.css';
 
-const Picker = React.lazy(() => import(/* webpackChunkName: 'emoji-picker */ '../vendor/emoji-picker'));
+const Picker = React.lazy(() => import(/* webpackChunkName: "emoji-picker" */ '../vendor/emoji-picker'));
 
 const propTypes = {
   selectedEmoji: PropTypes.oneOfType([
