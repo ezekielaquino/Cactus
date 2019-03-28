@@ -24,7 +24,6 @@ function StatusItem(props) {
     onChange,
   } = props;
   const [ bodyHeight, setBodyHeight ] = useState(100);
-  const [ isFocused, setFocus ] = useState(true);
   const bodyRef = useRef();
 
   const handleChange = (e, args) => {
@@ -51,7 +50,6 @@ function StatusItem(props) {
         <Wrap
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          isFocused={isFocused}
           ref={provided.innerRef}>
           <Field>
             <div>
@@ -64,8 +62,6 @@ function StatusItem(props) {
                 name="title"
                 placeholder="Summary"
                 onChange={handleChange}
-                onFocus={() => setFocus(true)}
-                onBlur={() => setFocus(false)}
                 autoComplete="off"
                 autoFocus />
             </div>
@@ -78,8 +74,6 @@ function StatusItem(props) {
               placeholder="A short description"
               height={bodyHeight}
               ref={bodyRef}
-              onFocus={() => setFocus(true)}
-              onBlur={() => setFocus(false)}
               onChange={handleChange} />
           </Field>
 
@@ -101,7 +95,10 @@ const Wrap = styled.div`
   border-radius: 10px;
   padding: 15px;
   margin-top: 15px;
-  box-shadow: ${props => props.isFocused && '4px 5px 10px rgba(0, 0, 0, 0.04)'};
+
+  &:focus-within {
+    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.04);
+  }
 
   footer {
     display: flex;
