@@ -55,9 +55,13 @@ function App(props) {
     setStatusItems(items);
   };
 
-  const handleCopy = () => {
-    clipboardRef.current.select();
-    document.execCommand('copy');
+  const handleCopy = async () => {
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(result);
+    } else {
+      clipboardRef.current.select();
+      document.execCommand('copy');
+    }
 
     playPop();
     setCopied(true);
