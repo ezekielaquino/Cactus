@@ -13,7 +13,7 @@ import '../components/base.css';
 
 const initialEmojis = ['🐶', '🐣', '🌸', '🌈', '️🐹', '🦖', '🍒', '🍑', '🥝' , '🍰'];
 const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * initialEmojis.length), 1);
-const initialEmoji = getInitialEmoji();
+const initialEmoji = getInitialEmoji()[0];
 
 function App(props) {
   const [ statusItems, setStatusItems ] = useState([{ emoji: initialEmoji }]);
