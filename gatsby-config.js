@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   siteMetadata: {
     title: `Cactus`,
@@ -14,6 +16,13 @@ module.exports = {
       options: {
         trackingId: `UA-137038206-1`,
         head: false,
+      },
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'images',
+        path: path.join(__dirname, 'src', 'assets'),
       },
     },
   ],

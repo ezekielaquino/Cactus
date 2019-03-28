@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import {graphql} from 'gatsby';
+import Image from 'gatsby-image';
 import { keyframes } from 'emotion';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { playPop } from '../components/Pop';
@@ -13,13 +15,12 @@ const initialEmojis = ['🐶', '🐣', '🌸', '🌈', '️🐹', '🦖', '🍒'
 const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * initialEmojis.length), 1);
 const initialEmoji = getInitialEmoji();
 
-function App() {
+function App(props) {
   const [ statusItems, setStatusItems ] = useState([{ emoji: initialEmoji }]);
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
   const [ headline, setHeadline ] = useState('A quick summary...');
   const clipboardRef = useRef();
-  const cactusImg = 'https://www.nicepng.com/png/detail/110-1106868_tumblr-cactus-png-cute-cactus.png';
   // Previously, this was randomized via giphy api, but is very rate limiated
   const gifSrc = 'https://media.giphy.com/media/3ohc0WUqyvkVmFyZxe/giphy.mp4';
 
@@ -104,7 +105,7 @@ function App() {
   return (
     <Main>
       <Header>
-        <img alt="Cactus" src={cactusImg} />
+        <Image alt="Cactus" fixed={props.data.file.childImageSharp.fixed} />
       </Header>
 
       <Wrap>
@@ -345,5 +346,17 @@ const Success = styled.div`
   }
 `;
 
+
+export const query = graphql`
+  query {
+    file(relativePath: { eq: "cactus.png" }) {
+      childImageSharp {
+        fixed(width: 100, height: 107) {
+          ...GatsbyImageSharpFixed
+        }
+      }
+    }
+  }
+`;
 
 export default App;
