@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {graphql} from 'gatsby';
 import Image from 'gatsby-image';
+import Helmet from 'react-helmet';
 import { keyframes } from 'emotion';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { playPop } from '../components/Pop';
@@ -16,6 +17,7 @@ const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * in
 const initialEmoji = getInitialEmoji()[0];
 
 function App(props) {
+  const siteMeta = props.data.site.siteMetadata;
   const [ statusItems, setStatusItems ] = useState([{ emoji: initialEmoji }]);
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
@@ -108,8 +110,16 @@ function App(props) {
 
   return (
     <Main>
+      <Helmet title={siteMeta.title}>
+        <meta name="description" content={siteMeta.description} />
+        <meta name="twitter:site" content={siteMeta.author} />
+        <meta name="twitter:creator" content={siteMeta.author} />
+        <meta property="og:title" content={siteMeta.title} />
+        <meta property="og:description" content={siteMeta.description} />
+      </Helmet>
+      
       <Header>
-        <Image alt="Cactus" fixed={props.data.file.childImageSharp.fixed} />
+        <Image alt={siteMeta.title} fixed={props.data.file.childImageSharp.fixed} />
       </Header>
 
       <Wrap>
@@ -358,6 +368,13 @@ export const query = graphql`
         fixed(width: 100, height: 107) {
           ...GatsbyImageSharpFixed
         }
+      }
+    }
+    site {
+      siteMetadata {
+        title
+        description
+        author
       }
     }
   }
