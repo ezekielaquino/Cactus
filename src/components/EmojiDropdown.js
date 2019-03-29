@@ -1,9 +1,8 @@
-import React, { useRef, Suspense } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import EmojiPicker from './EmojiPicker';
 import 'emoji-mart/css/emoji-mart.css';
-
-const Picker = React.lazy(() => import(/* webpackChunkName: "emoji-picker" */ '../vendor/emoji-picker'));
 
 const propTypes = {
   selectedEmoji: PropTypes.oneOfType([
@@ -31,11 +30,9 @@ function EmojiDropdown(props) {
         { selectedEmoji || 'Emoji' }
       </summary>
 
-      <Suspense fallback={<p>Loading..</p>}>
-        <DropdownWrap>
-          <Picker onSelect={onPick} />
-        </DropdownWrap>
-      </Suspense>
+      <DropdownWrap>
+        <EmojiPicker onSelect={onPick}></EmojiPicker>
+      </DropdownWrap>
     </Wrap>
   )
 }
