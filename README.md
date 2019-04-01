@@ -23,7 +23,8 @@ A little app for making summaries/lists for posting on slack or some other markd
 
 - [ ] Slack integration
 - [ ] Dark mode lol
-- [ ] Mobile version
+- [x] Mobile styling
+- [ ] Harvest Timesheets integration
 - [ ] Get to a $300m valuation and actually exit for $1.3b
 
 [🌈 Use the App now 🕊](https://cactus-app.netlify.com/)
