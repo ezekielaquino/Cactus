@@ -139,9 +139,13 @@ const InputTitle = styled(Input)`
 `;
 
 const Delete = styled.button`
+  background: none;
   border: 0;
   font-size: 9px;
-  color: var(--muted);
+  font-family: inherit;
+  color: inherit;
+  padding: 0;
+  /* color: var(--muted); */
   cursor: pointer;
 
   &:hover {
