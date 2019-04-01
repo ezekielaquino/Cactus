@@ -1,17 +1,29 @@
 @import url('https://fonts.googleapis.com/css?family=Concert+One|Varela+Round|Oleo+Script');
 
+:root {
+  --background: #ececec;
+  --color: #333;
+  --muted: #999;
+  --blue: #80b3ff9c;
+  --purple: #A3A1DE;
+  --purple-dark: #9a98d4;
+  --vaiant1: #fff;
+  --vaiant2: #f4f4f4;
+}
+
 html {
-  background-color: #ececec;
-}
-
-body {
   font-family: 'Varela Round', 'Arial', sans-serif;
-  color: #333;
   -webkit-font-smoothing: antialiased;
+  color: var(--color);
+  background-color: var(--background);
 }
 
-input {
+input, textarea {
   color: inherit;
+}
+
+::placeholder {
+  color: --var(muted);
 }
 
 h1, h2, h3, h4 {
@@ -21,5 +33,4 @@ h1, h2, h3, h4 {
 
 textarea {
   line-height: 1.2;
-  color: #555;
 }

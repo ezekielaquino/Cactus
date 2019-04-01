@@ -91,7 +91,7 @@ function StatusItem(props) {
 }
 
 const Wrap = styled.div`
-  background-color: #fff;
+  background-color: var(--vaiant1);
   border-radius: 10px;
   padding: 15px;
   margin-top: 15px;
@@ -121,16 +121,17 @@ const Field = styled.div`
 
 const Input = styled.input`
   width: 100%;
+  background-color: var(--vaiant2);
   height: ${props => props.height}px;
   border: 0;
   padding: 10px;
-  background-color: #f4f4f4;
   border-radius: 4px;
   resize: none;
 `;
 
 const InputTitle = styled(Input)`
   font-family: 'Concert One';
+  background-color: var(--vaiant2);
   
   @media (min-width: 800px) {
     font-size: 1.12rem;
@@ -140,7 +141,7 @@ const InputTitle = styled(Input)`
 const Delete = styled.button`
   border: 0;
   font-size: 9px;
-  color: #777;
+  color: var(--muted);
   cursor: pointer;
 
   &:hover {
