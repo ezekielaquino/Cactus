@@ -11,6 +11,15 @@
   --vaiant2: #f4f4f4;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #272727;
+    --color: #fff;
+    --vaiant1: #3a3a3a;
+    --vaiant2: #212121;
+  }
+}
+
 html {
   font-family: 'Varela Round', 'Arial', sans-serif;
   -webkit-font-smoothing: antialiased;
