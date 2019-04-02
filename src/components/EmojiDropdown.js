@@ -1,9 +1,8 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
-import { Picker } from 'emoji-mart';
+import EmojiPicker from './EmojiPicker';
 import 'emoji-mart/css/emoji-mart.css';
-
 
 const propTypes = {
   selectedEmoji: PropTypes.oneOfType([
@@ -32,7 +31,7 @@ function EmojiDropdown(props) {
       </summary>
 
       <DropdownWrap>
-        <Picker onSelect={onPick} />
+        <EmojiPicker onSelect={onPick}></EmojiPicker>
       </DropdownWrap>
     </Wrap>
   )

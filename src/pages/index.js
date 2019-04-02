@@ -1,4 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+import {graphql} from 'gatsby';
+import Image from 'gatsby-image';
+import Helmet from 'react-helmet';
 import { keyframes } from 'emotion';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { playPop } from '../components/Pop';
@@ -11,15 +14,15 @@ import '../components/base.css';
 
 const initialEmojis = ['🐶', '🐣', '🌸', '🌈', '️🐹', '🦖', '🍒', '🍑', '🥝' , '🍰'];
 const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * initialEmojis.length), 1);
-const initialEmoji = getInitialEmoji();
+const initialEmoji = getInitialEmoji()[0];
 
-function App() {
+function App(props) {
+  const siteMeta = props.data.site.siteMetadata;
   const [ statusItems, setStatusItems ] = useState([{ emoji: initialEmoji }]);
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
   const [ headline, setHeadline ] = useState('A quick summary...');
   const clipboardRef = useRef();
-  const cactusImg = 'https://www.nicepng.com/png/detail/110-1106868_tumblr-cactus-png-cute-cactus.png';
   // Previously, this was randomized via giphy api, but is very rate limiated
   const gifSrc = 'https://media.giphy.com/media/3ohc0WUqyvkVmFyZxe/giphy.mp4';
 
@@ -54,9 +57,13 @@ function App() {
     setStatusItems(items);
   };
 
-  const handleCopy = () => {
-    clipboardRef.current.select();
-    document.execCommand('copy');
+  const handleCopy = async () => {
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(result);
+    } else {
+      clipboardRef.current.select();
+      document.execCommand('copy');
+    }
 
     playPop();
     setCopied(true);
@@ -103,8 +110,16 @@ function App() {
 
   return (
     <Main>
+      <Helmet title={siteMeta.title}>
+        <meta name="description" content={siteMeta.description} />
+        <meta name="twitter:site" content={siteMeta.author} />
+        <meta name="twitter:creator" content={siteMeta.author} />
+        <meta property="og:title" content={siteMeta.title} />
+        <meta property="og:description" content={siteMeta.description} />
+      </Helmet>
+      
       <Header>
-        <img alt="Cactus" src={cactusImg} />
+        <Image alt={siteMeta.title} fixed={props.data.file.childImageSharp.fixed} />
       </Header>
 
       <Wrap>
@@ -345,5 +360,24 @@ const Success = styled.div`
   }
 `;
 
+
+export const query = graphql`
+  query {
+    file(relativePath: { eq: "cactus.png" }) {
+      childImageSharp {
+        fixed(width: 100, height: 107) {
+          ...GatsbyImageSharpFixed
+        }
+      }
+    }
+    site {
+      siteMetadata {
+        title
+        description
+        author
+      }
+    }
+  }
+`;
 
 export default App;
