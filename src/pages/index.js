@@ -8,11 +8,11 @@ import Preview from '../components/Preview';
 import '../components/reset.css';
 import '../components/base.css';
 import initAccounts from 'providers/Accounts';
-import StatusMaker from 'components/StatusMaker';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import StatusItem from '../components/StatusItem';
+
 import { initialEmoji, getInitialEmoji } from 'utils/RandomEmoji';
 
-
-const initialEmoji = getInitialEmoji()[0];
 
 function App() {
   const [ statusItems, setStatusItems ] = useState([{ emoji: initialEmoji }]);
@@ -121,12 +121,29 @@ function App() {
             onClick={e => e.currentTarget.select()}
             onChange={e => setHeadline(e.target.value)} />
           
-          <StatusMaker
-            statusItems={statusItems}
-            handleChange={handleChange}
-            handleDragEnd={handleDragEnd}
-            handleAdd={handleAdd}
-            handleDelete={handleDelete} />
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId="droppable">
+              {provided => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}>
+                  { statusItems.map((status, index) => {
+                    return (
+                      <StatusItem
+                        key={`status-${index}`}
+                        index={index}
+                        itemData={statusItems[index]}
+                        onChange={handleChange}
+                        handleAdd={handleAdd}
+                        handleDelete={statusItems.length > 1 && handleDelete} />
+                    )
+                  }) }
+
+                  { provided.placeholder }
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
 
           <footer>
             <AddButton onClick={handleAdd}>+</AddButton>
