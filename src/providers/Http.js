@@ -1,11 +1,13 @@
 let HEADERS = {};
 
-export const init = () => {
+export const init = token => {
   HEADERS = {
     "User-Agent": "Cactus (http://localhost:8000)",
-    "Authorization": `Bearer ${localStorage.getItem('harvestToken')}`,
+    "Authorization": `Bearer ${token || localStorage.getItem('harvestToken')}`,
     "Content-Type": "application/json",
   };
+
+  console.log('initialized')
 };
 
 export const get = (url, args = {}) => {

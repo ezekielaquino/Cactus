@@ -1,17 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {graphql} from 'gatsby';
-import { playPop } from '../components/Pop';
+import { playPop } from 'components/Pop';
 import { DebounceInput } from 'react-debounce-input';
-import styled from '@emotion/styled';
-import Header from '../components/Header';
-import Preview from '../components/Preview';
-import '../components/reset.css';
-import '../components/base.css';
-import initAccounts from 'providers/Accounts';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import StatusItem from '../components/StatusItem';
-
 import { initialEmoji, getInitialEmoji } from 'utils/RandomEmoji';
+import styled from '@emotion/styled';
+import Header from 'components/Header';
+import Preview from 'components/Preview';
+import initAccounts from 'providers/Accounts';
+import StatusItem from 'components/StatusItem';
+import 'components/reset.css';
+import 'components/base.css';
 
 
 function App() {

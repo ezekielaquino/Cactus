@@ -33,11 +33,19 @@ function Header() {
                   { userString }
                 </h3>
               }
+
+              { !context.harvestToken &&
+                <InitialPrompt>
+                  <p>
+                    Hey there! Welcome to me!<br/>
+                    <br/>
+                    Looks like you're not logged in! You get wonderful features like Harvest integration when you do! Click below!
+                  </p>
+
+                  <button onClick={handleHarvest}>Connect with Harvest</button>
+                </InitialPrompt>
+              }
             </ImageWrap>
-            
-            { !context.harvestToken &&
-              <button onClick={handleHarvest}>Connect with Harvest</button>
-            }
           </Wrap>
         )
       }} />
@@ -79,6 +87,29 @@ const ImageWrap = styled.div`
     top: 12px;
     left: 95px;
     transform: rotate(-2deg);
+  }
+`;
+
+const InitialPrompt = styled.div`
+  width: 250px;
+  position: absolute;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.2;
+  padding: 5px;
+  left: 95px;
+  top: 42px;
+  background: pink;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+
+  button {
+    width: 100%;
+    padding: 10px;
+    border: 0;
+    background: #50b350;
+    color: white;
+    border-radius: 30px;
+    margin-top: 15px;
   }
 `;
 
