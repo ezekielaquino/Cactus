@@ -95,7 +95,6 @@ const ResultWrap = styled.div`
     content: 'Cute little preview';
     position: absolute;
     font-size: 11px;
-    color: #999;
     bottom: calc(100% + 10px);
     left: 0;
   }
@@ -122,7 +121,7 @@ const PreviewItem = styled.li`
 `;
 
 const PreviewText = styled.p`
-  color: ${props => !props.isDirty && '#999'};
+  color: ${props => !props.isDirty && 'var(--muted)'};
   pointer-events: none;
   white-space: pre-wrap;
   line-height: 1.2;
@@ -131,8 +130,8 @@ const PreviewText = styled.p`
 const Prompt = styled.span`
   padding: 10px;
   font-size: 11px;
-  background-color: #999;
-  color: #fff;
+  background-color: var(--muted);
+  color: var(--vaiant);
   position: absolute;
   border-radius: 15px;
   left: ${props => props.position.offsetX + 10}px;
@@ -147,7 +146,7 @@ const Prompt = styled.span`
 const Fineprint = styled.span`
   font-size: 11px;
   text-align: right;
-  color: #999;
+  color: var(--muted);
   display: block;
   padding-top: 10px;
 
