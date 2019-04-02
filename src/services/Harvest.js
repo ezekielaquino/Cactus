@@ -15,6 +15,8 @@ export const getHarvestProjects = ({ accountId, userId }) => {
     }
   })
   .then(response => response.json())
-  .then(data => console.log(data))
+  .then(data => {
+    return data.project_assignments.filter(project => project.is_active);
+  })
   .catch(e => console.log(e));
 };

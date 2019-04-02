@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import ProjectPicker from 'components/ProjectPicker';
 import EmojiDropdown from './EmojiDropdown';
 import { Draggable } from 'react-beautiful-dnd';
 import { playPop } from './Pop';
@@ -27,10 +28,15 @@ function StatusItem(props) {
   const bodyRef = useRef();
 
   const handleChange = (e, args) => {
-    const key = args ? args.key : e.target.name;
-    const value = args ? args.value : e.target.value;
+    let key = args ? args.key : e.target.name;
+    let value = args ? args.value : e.target.value;
 
-    if (e && e.target.name === 'body') {
+    if (args && args.action === 'select-option') {
+      key = e.key;
+      value = e.label;
+    }
+
+    if (e && e.target && e.target.name === 'body') {
       setBodyHeight(bodyRef.current.scrollHeight);
     }
 
@@ -56,14 +62,16 @@ function StatusItem(props) {
               <EmojiDropdown
                 selectedEmoji={itemData.emoji}
                 onChange={handleChange} />
-
-              <InputTitle
+              
+              <ProjectPicker onChange={handleChange} />
+              
+              {/* <InputTitle
                 type="text"
                 name="title"
                 placeholder="Summary"
                 onChange={handleChange}
                 autoComplete="off"
-                autoFocus />
+                autoFocus /> */}
             </div>
           </Field>
 
@@ -112,6 +120,14 @@ const Field = styled.div`
   > div {
     display: flex;
     align-items: center;
+  }
+
+  .select {
+    width: 100%;
+  }
+
+  .select > div {
+    flex-grow: 1;
   }
 
   & + & {

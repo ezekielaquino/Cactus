@@ -8,27 +8,24 @@ function initAccounts() {
   const context = useContext(Context);
 
   useEffect(() => {
-    if (!context.isInitialized && context.harvestToken) {
-      getHarvestAccount()
-        .then(data => {
-          const { user, accounts } = data;
-          const forecastAccount = accounts.find(account => account.product === 'forecast');
+    getHarvestAccount()
+      .then(data => {
+        const { user, accounts } = data;
+        const account = accounts.find(account => account.product === 'harvest');
 
-          context.setUser(user);
-          context.setHarvestAccounts(accounts);
-          context.setInitialized(true);
-          
-          getHarvestProjects({
-            accountId: forecastAccount.id,
-            userId: user.id,
-          });
+        context.setUser(user);
+        context.setHarvestAccounts(accounts);
+        context.setInitialized(true);
+        
+        getHarvestProjects({
+          accountId: account.id,
+          userId: user.id,
+        })
+          .then(data => context.setActiveProjects(data));
 
-          console.log(`Hi there ${user.first_name}!`);
-          navigate('/');
-        });
-    }
-
-    context.setInitialized('initializing');
+        console.log(`Hi there ${user.first_name}!`);
+        navigate('/');
+      });
   }, []);
 }
 
