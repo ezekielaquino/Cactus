@@ -1,15 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {graphql} from 'gatsby';
-import Image from 'gatsby-image';
-import Helmet from 'react-helmet';
-import { keyframes } from 'emotion';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { playPop } from '../components/Pop';
 import styled from '@emotion/styled';
-import StatusItem from '../components/StatusItem';
+import Header from '../components/Header';
 import Preview from '../components/Preview';
 import '../components/reset.css';
 import '../components/base.css';
+import initAccounts from 'providers/Accounts';
+import StatusMaker from 'components/StatusMaker';
 
 
 const initialEmojis = ['🐶', '🐣', '🌸', '🌈', '️🐹', '🦖', '🍒', '🍑', '🥝' , '🍰'];
@@ -17,7 +15,6 @@ const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * in
 const initialEmoji = getInitialEmoji()[0];
 
 function App(props) {
-  const siteMeta = props.data.site.siteMetadata;
   const [ statusItems, setStatusItems ] = useState([{ emoji: initialEmoji }]);
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
@@ -94,6 +91,8 @@ function App(props) {
     setStatusItems(items);
   };
 
+  initAccounts();
+
   useEffect(() => {
     window.addEventListener('keyup', function(e){
       const isMeta = e.metaKey || e.ctrlKey;
@@ -110,17 +109,7 @@ function App(props) {
 
   return (
     <Main>
-      <Helmet title={siteMeta.title}>
-        <meta name="description" content={siteMeta.description} />
-        <meta name="twitter:site" content={siteMeta.author} />
-        <meta name="twitter:creator" content={siteMeta.author} />
-        <meta property="og:title" content={siteMeta.title} />
-        <meta property="og:description" content={siteMeta.description} />
-      </Helmet>
-      
-      <Header>
-        <Image alt={siteMeta.title} fixed={props.data.file.childImageSharp.fixed} />
-      </Header>
+      <Header />
 
       <Wrap>
         <Column>
@@ -131,29 +120,12 @@ function App(props) {
             onClick={e => e.currentTarget.select()}
             onChange={e => setHeadline(e.target.value)} />
           
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <Droppable droppableId="droppable">
-              {provided => (
-                <div
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}>
-                  { statusItems.map((status, index) => {
-                    return (
-                      <StatusItem
-                        key={`status-${index}`}
-                        index={index}
-                        itemData={statusItems[index]}
-                        onChange={handleChange}
-                        handleAdd={handleAdd}
-                        handleDelete={statusItems.length > 1 && handleDelete} />
-                    )
-                  }) }
-
-                  { provided.placeholder }
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+          <StatusMaker
+            statusItems={statusItems}
+            handleChange={handleChange}
+            handleDragEnd={handleDragEnd}
+            handleAdd={handleAdd}
+            handleDelete={handleDelete} />
 
           <footer>
             <AddButton onClick={handleAdd}>+</AddButton>
@@ -194,12 +166,6 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-const dance = keyframes`
-  0% { transform: skew(3deg) }
-  50% { transform: skew(-1deg) }
-  100% { transform: skew(3deg) }
-`;
-
 const Main = styled.main`
   @media (min-width: 800px) {
     padding: 60px;
@@ -215,37 +181,6 @@ const Wrap = styled.div`
   @media (min-width: 800px) {
     display: flex;
     justify-content: space-between;
-  }
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 5px;
-  display: block;
-  background-color: #ececec;
-  position: relative;
-  animation: ${dance} 1s infinite;
-  transform-origin: 50px 100%;
-  
-  img {
-    width: 100px;
-    height: auto;
-    display: block;
-    mix-blend-mode: darken;
-  }
-
-  &:after {
-    content: 'Cactus sounds like Status™';
-    font-size: 12px;
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 5px;
-    color: #555;
-    position: absolute;
-    top: 12px;
-    left: 95px;
-    transform: rotate(-2deg);
   }
 `;
 
@@ -360,16 +295,8 @@ const Success = styled.div`
   }
 `;
 
-
 export const query = graphql`
   query {
-    file(relativePath: { eq: "cactus.png" }) {
-      childImageSharp {
-        fixed(width: 100, height: 107) {
-          ...GatsbyImageSharpFixed
-        }
-      }
-    }
     site {
       siteMetadata {
         title
@@ -379,5 +306,6 @@ export const query = graphql`
     }
   }
 `;
+
 
 export default App;
