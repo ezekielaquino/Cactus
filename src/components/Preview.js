@@ -1,18 +1,18 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
+import { Context} from 'providers/Context';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
 
 const propTypes = {
   handleCopy: PropTypes.func,
-  statusItems: PropTypes.array,
   headline: PropTypes.string,
 };
 
 function Preview(props) {
   const {
-    handleCopy,
     statusItems,
+    handleCopy,
     headline,
   } = props;
   const [ pointer, setPointer ] = useState({ offsetX: 0, offsetY: 0 });
@@ -40,7 +40,7 @@ function Preview(props) {
 
         <ul>
           { statusItems.map((item, index) => {
-            const { emoji, title, body } = item;
+            const { emoji, title, body, time } = item;
 
             return (
               <PreviewItem key={`preview-${index}`}>
@@ -48,6 +48,10 @@ function Preview(props) {
                   as="h4"
                   isDirty={title}>
                   { emoji ? `${ emoji } ` : '' } { title || `A little summary` }
+
+                  { time &&
+                    <Time>{ time }</Time>
+                  }
                 </PreviewText>
 
                 <PreviewText isDirty={body}>
@@ -153,6 +157,13 @@ const Fineprint = styled.span`
     transform: translateX(-50%);
     top: 10px;
   }
+`;
+
+const Time = styled.sup`
+  vertical-align: top;
+  font-size: 12px;
+  opacity: 0.35;
+  padding-left: 4px;
 `;
 
 Preview.propTypes = propTypes;

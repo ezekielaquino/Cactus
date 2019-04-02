@@ -11,11 +11,12 @@ function ProjectPicker(props) {
     value: item.project.id,
     label: item.project.name,
   }));
+  const placeholder = options.length ? 'Select a project or type a custom summary' : 'Loading projects from Harvest...';
 
   return (
     <Select
       className="select"
-      placeholder="Select a project or type a custom summary"
+      placeholder={placeholder}
       options={options}
       onChange={onChange} />
   )

@@ -20,6 +20,7 @@ function EmojiDropdown(props) {
   const detailsRef = useRef();
 
   const onPick = emoji => {
+    console.log('sdfdfdf')
     onChange(null, { key: 'emoji', value: emoji.native });
     detailsRef.current.open = false;
   }

@@ -32,6 +32,7 @@ module.exports = {
         components: path.join(__dirname, 'src/components'),
         providers: path.join(__dirname, 'src/providers'),
         services: path.join(__dirname, 'src/services'),
+        utils: path.join(__dirname, 'src/utils'),
       }
     },
   ],

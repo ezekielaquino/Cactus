@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {graphql} from 'gatsby';
 import { playPop } from '../components/Pop';
+import { DebounceInput } from 'react-debounce-input';
 import styled from '@emotion/styled';
 import Header from '../components/Header';
 import Preview from '../components/Preview';
@@ -8,13 +9,10 @@ import '../components/reset.css';
 import '../components/base.css';
 import initAccounts from 'providers/Accounts';
 import StatusMaker from 'components/StatusMaker';
+import { initialEmoji, getInitialEmoji } from 'utils/RandomEmoji';
 
 
-const initialEmojis = ['🐶', '🐣', '🌸', '🌈', '️🐹', '🦖', '🍒', '🍑', '🥝' , '🍰'];
-const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * initialEmojis.length), 1);
-const initialEmoji = getInitialEmoji()[0];
-
-function App(props) {
+function App() {
   const [ statusItems, setStatusItems ] = useState([{ emoji: initialEmoji }]);
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
@@ -25,9 +23,9 @@ function App(props) {
 
   const handleAdd = () => {
     const items = [...statusItems];
-    
+
     playPop();
-    items.push({ emoji: getInitialEmoji() });
+    items.push({ emoji: getInitialEmoji()[0] });
     setStatusItems(items);
   };
 
@@ -115,6 +113,7 @@ function App(props) {
         <Column>
           <Headline
             type="text"
+            debounceTimeout={250}
             placeholder="Your headline"
             value={headline}
             onClick={e => e.currentTarget.select()}
@@ -248,7 +247,7 @@ const AddButton = styled.button`
   }
 `;
 
-const Headline = styled.input`
+const Headline = styled(DebounceInput)`
   border: 0;
   width: 100%;
   padding: 15px;

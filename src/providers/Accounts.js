@@ -8,6 +8,7 @@ function initAccounts() {
   const context = useContext(Context);
 
   useEffect(() => {
+    console.log('sdf')
     getHarvestAccount()
       .then(data => {
         const { user, accounts } = data;

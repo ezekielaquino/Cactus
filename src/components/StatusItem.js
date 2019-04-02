@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import ProjectPicker from 'components/ProjectPicker';
 import EmojiDropdown from './EmojiDropdown';
+import { DebounceInput } from 'react-debounce-input';
 import { Draggable } from 'react-beautiful-dnd';
 import { playPop } from './Pop';
+import TimePicker from './TimePicker';
 
 
 const propTypes = {
@@ -24,6 +26,7 @@ function StatusItem(props) {
     handleDelete,
     onChange,
   } = props;
+  const [ isInHarvest, setHarvestState ] = useState(false);
   const [ bodyHeight, setBodyHeight ] = useState(100);
   const bodyRef = useRef();
 
@@ -34,6 +37,13 @@ function StatusItem(props) {
     if (args && args.action === 'select-option') {
       key = e.key;
       value = e.label;
+      setHarvestState(true);
+    }
+
+    if (args && args.action === 'create-option') {
+      key = 'title';
+      value = e.value;
+      setHarvestState(false);
     }
 
     if (e && e.target && e.target.name === 'body') {
@@ -64,24 +74,23 @@ function StatusItem(props) {
                 onChange={handleChange} />
               
               <ProjectPicker onChange={handleChange} />
-              
-              {/* <InputTitle
-                type="text"
-                name="title"
-                placeholder="Summary"
-                onChange={handleChange}
-                autoComplete="off"
-                autoFocus /> */}
             </div>
           </Field>
+          
+          { isInHarvest &&
+            <TimePicker
+              selectedValue={itemData.time}
+              onChange={handleChange} />
+          }
 
           <Field>
             <Input
-              as="textarea"
+              element="textarea"
+              debounceTimeout={250}
               name="body"
               placeholder="A short description"
               height={bodyHeight}
-              ref={bodyRef}
+              inputRef={bodyRef}
               onChange={handleChange} />
           </Field>
 
@@ -135,7 +144,7 @@ const Field = styled.div`
   }
 `;
 
-const Input = styled.input`
+const Input = styled(DebounceInput)`
   width: 100%;
   height: ${props => props.height}px;
   border: 0;
@@ -168,4 +177,4 @@ const Delete = styled.button`
 StatusItem.propTypes = propTypes;
 
 
-export default StatusItem;
+export default React.memo(StatusItem);
