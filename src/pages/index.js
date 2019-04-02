@@ -11,7 +11,6 @@ import Preview from '../components/Preview';
 import '../components/reset.css';
 import '../components/base.css';
 
-
 const initialEmojis = ['🐶', '🐣', '🌸', '🌈', '️🐹', '🦖', '🍒', '🍑', '🥝' , '🍰'];
 const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * initialEmojis.length), 1);
 const initialEmoji = getInitialEmoji()[0];
@@ -223,7 +222,6 @@ const Header = styled.div`
   justify-content: space-between;
   padding-bottom: 5px;
   display: block;
-  background-color: #ececec;
   position: relative;
   animation: ${dance} 1s infinite;
   transform-origin: 50px 100%;
@@ -238,10 +236,9 @@ const Header = styled.div`
   &:after {
     content: 'Cactus sounds like Status™';
     font-size: 12px;
-    background-color: #fff;
+    background-color: var(--vaiant);
     border-radius: 8px;
     padding: 5px;
-    color: #555;
     position: absolute;
     top: 12px;
     left: 95px;
@@ -273,26 +270,26 @@ const ColumnRight = styled(Column)`
     position: fixed;
     bottom: 0;
     left: 0;
-    background-color: #fbfbfb;
+    background-color: var(--vaiant);
     box-shadow: 0px -5px 8px rgba(0, 0, 0, 0.03);
     padding: 15px;
   }
 `;
 
 const AddButton = styled.button`
+  background-color: var(--vaiant2);
+  color: var(--vaiant);
   width: 100%;
   height: 160px;
   border-radius: 8px;
   font-size: 32px;
   text-align: center;
-  color: #fff;
   position: relative;
   margin-top: 15px;
   padding: 15px;
   border: 0;
   cursor: pointer;
-  background: #f2f2f2;
-
+  
   &:before {
     position: absolute;
     top: 50%;
@@ -301,7 +298,7 @@ const AddButton = styled.button`
     content: '+';
     width: 60px;
     height: 60px;
-    background-color: #A3A1DE;
+    background-color: var(--purple);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -309,12 +306,13 @@ const AddButton = styled.button`
   }
 
   &:hover:before {
-    background-color: #9a98d4;
+    background-color: var(--purple-dark);
   }
 `;
 
 const Headline = styled.input`
   border: 0;
+  background-color: var(--vaiant);
   width: 100%;
   padding: 15px;
   border-radius: 8px;
@@ -340,7 +338,7 @@ const Success = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #80b3ff9c;
+  background-color: var(--blue);
 
   video {
     display: block;
@@ -350,7 +348,7 @@ const Success = styled.div`
   }
 
   > div {
-    background-color: #fff;
+    background-color: var(--vaiant);
     border-radius: 8px;
     margin: auto;
     padding: 15px;
