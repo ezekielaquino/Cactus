@@ -127,7 +127,7 @@ const Prompt = styled.span`
   padding: 10px;
   font-size: 11px;
   background-color: var(--muted);
-  color: var(--vaiant1);
+  color: var(--vaiant);
   position: absolute;
   border-radius: 15px;
   left: ${props => props.position.offsetX + 10}px;

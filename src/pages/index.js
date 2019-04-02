@@ -236,7 +236,7 @@ const Header = styled.div`
   &:after {
     content: 'Cactus sounds like Status™';
     font-size: 12px;
-    background-color: var(--vaiant1);
+    background-color: var(--vaiant);
     border-radius: 8px;
     padding: 5px;
     position: absolute;
@@ -270,7 +270,7 @@ const ColumnRight = styled(Column)`
     position: fixed;
     bottom: 0;
     left: 0;
-    background-color: var(--vaiant1);
+    background-color: var(--vaiant);
     box-shadow: 0px -5px 8px rgba(0, 0, 0, 0.03);
     padding: 15px;
   }
@@ -278,7 +278,7 @@ const ColumnRight = styled(Column)`
 
 const AddButton = styled.button`
   background-color: var(--vaiant2);
-  color: var(--vaiant1);
+  color: var(--vaiant);
   width: 100%;
   height: 160px;
   border-radius: 8px;
@@ -312,7 +312,7 @@ const AddButton = styled.button`
 
 const Headline = styled.input`
   border: 0;
-  background-color: var(--vaiant1);
+  background-color: var(--vaiant);
   width: 100%;
   padding: 15px;
   border-radius: 8px;
@@ -348,7 +348,7 @@ const Success = styled.div`
   }
 
   > div {
-    background-color: var(--vaiant1);
+    background-color: var(--vaiant);
     border-radius: 8px;
     margin: auto;
     padding: 15px;

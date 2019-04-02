@@ -7,7 +7,7 @@
   --blue: #80b3ff9c;
   --purple: #A3A1DE;
   --purple-dark: #9a98d4;
-  --vaiant1: #fff;
+  --vaiant: #fff;
   --vaiant2: #f4f4f4;
 }
 
@@ -15,7 +15,7 @@
   :root {
     --background: #272727;
     --color: #fff;
-    --vaiant1: #3a3a3a;
+    --vaiant: #3a3a3a;
     --vaiant2: #212121;
   }
 }

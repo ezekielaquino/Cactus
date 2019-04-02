@@ -91,7 +91,7 @@ function StatusItem(props) {
 }
 
 const Wrap = styled.div`
-  background-color: var(--vaiant1);
+  background-color: var(--vaiant);
   border-radius: 10px;
   padding: 15px;
   margin-top: 15px;
