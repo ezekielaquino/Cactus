@@ -13,10 +13,20 @@ export const init = token => {
 export const get = (url, args = {}) => {
   return fetch(url, {
     method: 'GET',
-    mode: 'cors',
     headers: {
       ...HEADERS,
       ...args.appendHeaders,
     },
   });
 };
+
+export const post = (url, body, args = {}) => {
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+      ...HEADERS,
+      ...args.appendHeaders,
+    },
+    body,
+  });
+}

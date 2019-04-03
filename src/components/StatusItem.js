@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import ProjectPicker from 'components/ProjectPicker';
+import TasksPicker from 'components/TasksPicker';
 import EmojiDropdown from './EmojiDropdown';
 import { DebounceInput } from 'react-debounce-input';
 import { Draggable } from 'react-beautiful-dnd';
@@ -33,16 +34,22 @@ function StatusItem(props) {
   const handleChange = (e, args) => {
     let key = args ? args.key : e.target.name;
     let value = args ? args.value : e.target.value;
+    let label;
 
     if (args && args.action === 'select-option') {
-      key = e.key;
-      value = e.label;
+      ({ key, value, label } = e);
+
+      // Also set the projectId
+      onChange(index, { key: 'projectId', value: e.projectId });
       setHarvestState(true);
     }
 
     if (args && args.action === 'create-option') {
       key = 'title';
       value = e.value;
+      
+      // Reset the time
+      onChange(index, { key: 'time', value: '' });
       setHarvestState(false);
     }
 
@@ -50,7 +57,7 @@ function StatusItem(props) {
       setBodyHeight(bodyRef.current.scrollHeight);
     }
 
-    onChange(index, { key, value });
+    onChange(index, { key, value, label });
   };
 
   const onDelete = () => {
@@ -78,9 +85,17 @@ function StatusItem(props) {
           </Field>
           
           { isInHarvest &&
-            <TimePicker
-              selectedValue={itemData.time}
-              onChange={handleChange} />
+            <>
+              <Field>
+                <TasksPicker
+                  selectedProject={itemData.title.value}
+                  onChange={handleChange} />
+              </Field>
+
+              <TimePicker
+                selectedValue={itemData.time}
+                onChange={handleChange} />
+            </>
           }
 
           <Field>

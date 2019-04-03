@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import {graphql} from 'gatsby';
 import { playPop } from 'components/Pop';
 import { DebounceInput } from 'react-debounce-input';
+import { Context } from 'providers/Context';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { initialEmoji, getInitialEmoji } from 'utils/RandomEmoji';
 import styled from '@emotion/styled';
@@ -9,11 +10,11 @@ import Header from 'components/Header';
 import Preview from 'components/Preview';
 import initAccounts from 'providers/Accounts';
 import StatusItem from 'components/StatusItem';
-import 'components/reset.css';
-import 'components/base.css';
+import { createHarvestTimesheet } from '../services/Harvest';
 
 
 function App() {
+  const context = useContext(Context);
   const [ statusItems, setStatusItems ] = useState([{ emoji: initialEmoji }]);
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
@@ -44,11 +45,11 @@ function App() {
   };
 
   const handleChange = (itemIndex, args) => {
-    const { key, value } = args;
+    const { key, value, label } = args;
     const items = [...statusItems];
     const item = items[itemIndex];
 
-    item[key] = value;
+    item[key] = (label && value) ? { label, value } : value;
 
     setStatusItems(items);
   };
@@ -88,6 +89,10 @@ function App() {
     );
 
     setStatusItems(items);
+  };
+
+  const handleTimesheet = () => {
+    createHarvestTimesheet(statusItems);
   };
 
   initAccounts();
@@ -155,6 +160,10 @@ function App() {
             handleCopy={handleCopy}
             isCopied={isCopied}
             headline={headline} />
+          
+          { context.harvestToken &&
+            <TestButton onClick={handleTimesheet}>Copy to clipboard + Create timesheet</TestButton>
+          }
         </ColumnRight>
 
         { (gifSrc && isCopied) &&
@@ -311,6 +320,15 @@ const Success = styled.div`
     box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.04);
     font-weight: bold;
   }
+`;
+
+const TestButton = styled.button`
+  background: blue;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 20px;
+  border: 0;
 `;
 
 export const query = graphql`

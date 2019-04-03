@@ -40,14 +40,14 @@ function Preview(props) {
 
         <ul>
           { statusItems.map((item, index) => {
-            const { emoji, title, body, time } = item;
+            const { emoji, title = {}, body, time } = item;
 
             return (
               <PreviewItem key={`preview-${index}`}>
                 <PreviewText
                   as="h4"
                   isDirty={title}>
-                  { emoji ? `${ emoji } ` : '' } { title || `A little summary` }
+                  { emoji ? `${ emoji } ` : '' } { title.label || `A little summary` }
 
                   { time &&
                     <Time>{ time }</Time>

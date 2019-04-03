@@ -8,7 +8,8 @@ function ProjectPicker(props) {
   const context = useContext(Context);
   const options = context.activeProjects.map(item => ({
     key: 'title',
-    value: item.project.id,
+    value: item.id,
+    projectId: item.project.id,
     label: item.project.name,
   }));
   const placeholder = options.length ? 'Select a project or type a custom summary' : 'Loading projects from Harvest...';

@@ -2,6 +2,8 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { init as httpInit } from 'providers/Http';
 import { ContextProvider } from 'providers/Context';
+import 'components/reset.css';
+import 'components/base.css';
 
 
 export const wrapRootElement = ({ element }) => {
