@@ -7,6 +7,7 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { playPop } from '../components/Pop';
 import styled from '@emotion/styled';
 import StatusItem from '../components/StatusItem';
+import Header from '../components/Header';
 import Preview from '../components/Preview';
 import '../components/reset.css';
 import '../components/base.css';
@@ -210,41 +211,15 @@ const Main = styled.main`
   }
 `;
 
-const Wrap = styled.div`
+const Wrap = styled.section`
+ 
   @media (min-width: 800px) {
     display: flex;
     justify-content: space-between;
   }
 `;
 
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 5px;
-  display: block;
-  position: relative;
-  animation: ${dance} 1s infinite;
-  transform-origin: 50px 100%;
-  
-  img {
-    width: 100px;
-    height: auto;
-    display: block;
-    mix-blend-mode: darken;
-  }
 
-  &:after {
-    content: 'Cactus sounds like Status™';
-    font-size: 12px;
-    background-color: var(--vaiant);
-    border-radius: 8px;
-    padding: 5px;
-    position: absolute;
-    top: 12px;
-    left: 95px;
-    transform: rotate(-2deg);
-  }
-`;
 
 const Column = styled.div`
   @media (min-width: 800px) {
