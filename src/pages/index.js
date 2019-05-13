@@ -14,6 +14,8 @@ import ChannelPicker from '../components/ChannelPicker';
 
 import { Context } from '../providers/Context';
 import initSlack from '../providers/SlackAccount';
+import { sendMessage } from '../services/Slack';
+
 const initialEmojis = ['🐶', '🐣', '🌸', '🌈', '️🐹', '🦖', '🍒', '🍑', '🥝' , '🍰'];
 const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * initialEmojis.length), 1);
 const initialEmoji = getInitialEmoji()[0];
@@ -24,6 +26,7 @@ function App() {
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
   const [ headline, setHeadline ] = useState('A quick summary...');
+  const [ buttonText, setButtonText ] = useState('Pick a channel, any channel');
   const clipboardRef = useRef();
   // Previously, this was randomized via giphy api, but is very rate limiated
   const gifSrc = 'https://media.giphy.com/media/3ohc0WUqyvkVmFyZxe/giphy.mp4';
@@ -96,6 +99,16 @@ function App() {
     setStatusItems(items);
   };
 
+  const postToSlack = () => {
+    const token = context.slackAccessToken; 
+    const slackChannel = context.slackChannel; 
+    sendMessage(token, slackChannel, result);
+    setTimeout(() => {
+      setButtonText('💯👌');
+    }, 1000);
+  };
+
+  initSlack();
   useEffect(() => {
     window.addEventListener('keyup', function(e){
       const isMeta = e.metaKey || e.ctrlKey;
@@ -157,6 +170,18 @@ function App() {
             handleCopy={handleCopy}
             isCopied={isCopied}
             headline={headline} />
+
+            {context.channels.length > 0 && 
+              <>
+                <ChannelPicker 
+                  channels={context.channels}
+                  value={context.slackChannel}  
+                  onChange={e => context.setSlackChannel(e.value)} 
+                />
+                <TestButton onClick={postToSlack}>{buttonText}</TestButton>
+              </>
+            }
+
         </ColumnRight>
 
         { (gifSrc && isCopied) &&
@@ -205,7 +230,7 @@ const Main = styled.main`
 const Wrap = styled.section`
   position: relative; 
   top: 5rem; 
- 
+
   @media (min-width: 800px) {
     display: flex;
     justify-content: space-between;
@@ -288,6 +313,15 @@ const Headline = styled.input`
   @media (min-width: 800px) {
     font-size: 1.12rem;
   }
+`;
+
+const TestButton = styled.button`
+  background: blue;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 20px;
+  border: 0;
 `;
 
 const Clipboard = styled.textarea`
