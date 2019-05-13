@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import {graphql} from 'gatsby';
 import Image from 'gatsby-image';
 import Helmet from 'react-helmet';
@@ -17,7 +17,7 @@ const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * in
 const initialEmoji = getInitialEmoji()[0];
 
 function App(props) {
-  const siteMeta = props.data.site.siteMetadata;
+  const context = useContext(Context);
   const [ statusItems, setStatusItems ] = useState([{ emoji: initialEmoji }]);
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
