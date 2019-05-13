@@ -1,22 +1,24 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import {graphql} from 'gatsby';
-import Image from 'gatsby-image';
-import Helmet from 'react-helmet';
-import { keyframes } from 'emotion';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import { playPop } from '../components/Pop';
-import styled from '@emotion/styled';
-import StatusItem from '../components/StatusItem';
-import Header from '../components/Header';
-import Preview from '../components/Preview';
-import '../components/reset.css';
-import '../components/base.css';
 
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+
+import { keyframes } from 'emotion';
+import styled from '@emotion/styled';
+
+import { playPop } from '../components/Pop';
+import Header from '../components/Header';
+import StatusItem from '../components/StatusItem';
+import Preview from '../components/Preview';
+import ChannelPicker from '../components/ChannelPicker';
+
+import { Context } from '../providers/Context';
+import initSlack from '../providers/SlackAccount';
 const initialEmojis = ['🐶', '🐣', '🌸', '🌈', '️🐹', '🦖', '🍒', '🍑', '🥝' , '🍰'];
 const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * initialEmojis.length), 1);
 const initialEmoji = getInitialEmoji()[0];
 
-function App(props) {
+function App() {
   const context = useContext(Context);
   const [ statusItems, setStatusItems ] = useState([{ emoji: initialEmoji }]);
   const [ result, setResult ] = useState('');
@@ -110,18 +112,7 @@ function App(props) {
 
   return (
     <Main>
-      <Helmet title={siteMeta.title}>
-        <meta name="description" content={siteMeta.description} />
-        <meta name="twitter:site" content={siteMeta.author} />
-        <meta name="twitter:creator" content={siteMeta.author} />
-        <meta property="og:title" content={siteMeta.title} />
-        <meta property="og:description" content={siteMeta.description} />
-      </Helmet>
-      
-      <Header>
-        <Image alt={siteMeta.title} fixed={props.data.file.childImageSharp.fixed} />
-      </Header>
-
+      <Header/>
       <Wrap>
         <Column>
           <Headline
@@ -212,14 +203,14 @@ const Main = styled.main`
 `;
 
 const Wrap = styled.section`
+  position: relative; 
+  top: 5rem; 
  
   @media (min-width: 800px) {
     display: flex;
     justify-content: space-between;
   }
 `;
-
-
 
 const Column = styled.div`
   @media (min-width: 800px) {
