@@ -12,13 +12,14 @@ function ChannelPicker(props) {
   }));
 
   const placeholder = options.length ? 'Select a channel' : 'Loading channels from Slack...';
-
+  const getDefault = options.find(option => option.label === 'status');
   return (
     <>
     <Wrapper>
       <Select
         className="select"
         placeholder={placeholder}
+        defaultValue={getDefault}
         options={options}
         onChange={onChange}
         currentValue={value}
