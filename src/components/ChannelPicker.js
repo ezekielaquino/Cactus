@@ -16,6 +16,7 @@ function ChannelPicker(props) {
   return (
     <>
     <Wrapper>
+        <span>Pick a slack channel</span>
       <Select
         className="select"
         placeholder={placeholder}
