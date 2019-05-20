@@ -1,26 +1,32 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import {graphql} from 'gatsby';
-import Image from 'gatsby-image';
-import Helmet from 'react-helmet';
-import { keyframes } from 'emotion';
+
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import { playPop } from '../components/Pop';
+
+import { keyframes } from 'emotion';
 import styled from '@emotion/styled';
+
+import { playPop } from '../components/Pop';
+import Header from '../components/Header';
 import StatusItem from '../components/StatusItem';
 import Preview from '../components/Preview';
-import '../components/reset.css';
-import '../components/base.css';
+import ChannelPicker from '../components/ChannelPicker';
+
+import { Context } from '../providers/Context';
+import initSlack from '../providers/SlackAccount';
+import { sendMessage } from '../services/Slack';
 
 const initialEmojis = ['🐶', '🐣', '🌸', '🌈', '️🐹', '🦖', '🍒', '🍑', '🥝' , '🍰'];
 const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * initialEmojis.length), 1);
 const initialEmoji = getInitialEmoji()[0];
 
-function App(props) {
-  const siteMeta = props.data.site.siteMetadata;
+function App() {
+  const context = useContext(Context);
   const [ statusItems, setStatusItems ] = useState([{ emoji: initialEmoji }]);
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
   const [ headline, setHeadline ] = useState('A quick summary...');
+  const [buttonText, setButtonText] = useState("Post to status")
   const clipboardRef = useRef();
   // Previously, this was randomized via giphy api, but is very rate limiated
   const gifSrc = 'https://media.giphy.com/media/3ohc0WUqyvkVmFyZxe/giphy.mp4';
@@ -72,6 +78,11 @@ function App(props) {
     }, 3000);
   };
 
+  const handleChannelChange = e => {
+    context.setSlackChannel(e.value)
+    setButtonText(`Post to ${e.label}`)
+  }
+
   const handleDelete = index => {
     const items = [...statusItems];
     
@@ -93,6 +104,16 @@ function App(props) {
     setStatusItems(items);
   };
 
+  const postToSlack = () => {
+    const token = context.slackAccessToken; 
+    const slackChannel = context.slackChannel; 
+    sendMessage(token, slackChannel, result);
+    setTimeout(() => {
+      setButtonText('💯👌');
+    }, 1000);
+  };
+
+  initSlack();
   useEffect(() => {
     window.addEventListener('keyup', function(e){
       const isMeta = e.metaKey || e.ctrlKey;
@@ -109,18 +130,7 @@ function App(props) {
 
   return (
     <Main>
-      <Helmet title={siteMeta.title}>
-        <meta name="description" content={siteMeta.description} />
-        <meta name="twitter:site" content={siteMeta.author} />
-        <meta name="twitter:creator" content={siteMeta.author} />
-        <meta property="og:title" content={siteMeta.title} />
-        <meta property="og:description" content={siteMeta.description} />
-      </Helmet>
-      
-      <Header>
-        <Image alt={siteMeta.title} fixed={props.data.file.childImageSharp.fixed} />
-      </Header>
-
+      <Header/>
       <Wrap>
         <Column>
           <Headline
@@ -165,6 +175,18 @@ function App(props) {
             handleCopy={handleCopy}
             isCopied={isCopied}
             headline={headline} />
+
+            {context.channels.length > 0 && 
+              <>
+                <ChannelPicker 
+                  channels={context.channels}
+                  value={context.slackChannel}  
+                  onChange={e => handleChannelChange(e)}
+                />
+                <TestButton onClick={postToSlack}>{buttonText}</TestButton>
+              </>
+            }
+
         </ColumnRight>
 
         { (gifSrc && isCopied) &&
@@ -210,39 +232,13 @@ const Main = styled.main`
   }
 `;
 
-const Wrap = styled.div`
+const Wrap = styled.section`
+  position: relative; 
+  top: 5rem; 
+
   @media (min-width: 800px) {
     display: flex;
     justify-content: space-between;
-  }
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 5px;
-  display: block;
-  position: relative;
-  animation: ${dance} 1s infinite;
-  transform-origin: 50px 100%;
-  
-  img {
-    width: 100px;
-    height: auto;
-    display: block;
-    mix-blend-mode: darken;
-  }
-
-  &:after {
-    content: 'Cactus sounds like Status™';
-    font-size: 12px;
-    background-color: var(--vaiant);
-    border-radius: 8px;
-    padding: 5px;
-    position: absolute;
-    top: 12px;
-    left: 95px;
-    transform: rotate(-2deg);
   }
 `;
 
@@ -322,7 +318,21 @@ const Headline = styled.input`
   @media (min-width: 800px) {
     font-size: 1.12rem;
   }
-`;
+`
+
+const TestButton = styled.button`
+  background: blue;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 20px;
+  border: 0;
+  
+  :hover {
+    cursor: pointer;
+    opacity: 0.5;
+  }
+`
 
 const Clipboard = styled.textarea`
   position: absolute;
