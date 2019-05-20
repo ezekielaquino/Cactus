@@ -26,7 +26,7 @@ function App() {
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
   const [ headline, setHeadline ] = useState('A quick summary...');
-  const [ buttonText, setButtonText ] = useState('Pick a channel, any channel');
+  const [buttonText, setButtonText] = useState("Post to status")
   const clipboardRef = useRef();
   // Previously, this was randomized via giphy api, but is very rate limiated
   const gifSrc = 'https://media.giphy.com/media/3ohc0WUqyvkVmFyZxe/giphy.mp4';
@@ -77,6 +77,11 @@ function App() {
       setCopied(false);
     }, 3000);
   };
+
+  const handleChannelChange = e => {
+    context.setSlackChannel(e.value)
+    setButtonText(`Post to ${e.label}`)
+  }
 
   const handleDelete = index => {
     const items = [...statusItems];
@@ -176,7 +181,7 @@ function App() {
                 <ChannelPicker 
                   channels={context.channels}
                   value={context.slackChannel}  
-                  onChange={e => context.setSlackChannel(e.value)} 
+                  onChange={e => handleChannelChange(e)}
                 />
                 <TestButton onClick={postToSlack}>{buttonText}</TestButton>
               </>
@@ -313,7 +318,7 @@ const Headline = styled.input`
   @media (min-width: 800px) {
     font-size: 1.12rem;
   }
-`;
+`
 
 const TestButton = styled.button`
   background: blue;
@@ -322,7 +327,12 @@ const TestButton = styled.button`
   font-size: 16px;
   padding: 10px 20px;
   border: 0;
-`;
+  
+  :hover {
+    cursor: pointer;
+    opacity: 0.5;
+  }
+`
 
 const Clipboard = styled.textarea`
   position: absolute;
