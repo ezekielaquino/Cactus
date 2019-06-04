@@ -192,7 +192,7 @@ function App() {
           </DragDropContext>
 
           <footer>
-            <AddButton onClick={handleAdd}>+</AddButton>
+            <AddButton onClick={handleAdd} title="Add item">+</AddButton>
           </footer>
         </Column>
 
