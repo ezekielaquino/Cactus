@@ -26,13 +26,13 @@ const DEFAULT_HEADLINE = 'A quick summary...';
 
 const retrieveDefaultStatusItems = () => {
   if (window.localStorage == null) {
-    return DEFAULT_STATUS_ITEMS;
+    return null;
   }
 
   const items = JSON.parse(localStorage.getItem('cactusStatusItems'));
 
   if (items == null || items.length < 1) {
-    return DEFAULT_STATUS_ITEMS;
+    return null;
   }
 
   return items;
@@ -40,24 +40,20 @@ const retrieveDefaultStatusItems = () => {
 
 const retrieveDefaultHeadline = () => {
   if (window.localStorage == null) {
-    return DEFAULT_HEADLINE;
+    return null;
   }
 
   const headline = localStorage.getItem('cactusHeadline');
-
-  if (headline == null) {
-    return DEFAULT_HEADLINE;
-  }
 
   return headline;
 }
 
 function App() {
   const context = useContext(Context);
-  const [ statusItems, setStatusItems ] = useState(retrieveDefaultStatusItems());
+  const [ statusItems, setStatusItems ] = useState(DEFAULT_STATUS_ITEMS);
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
-  const [ headline, setHeadline ] = useState(retrieveDefaultHeadline());
+  const [ headline, setHeadline ] = useState(DEFAULT_HEADLINE);
   const [buttonText, setButtonText] = useState("Post to status")
   const clipboardRef = useRef();
   // Previously, this was randomized via giphy api, but is very rate limiated
@@ -85,7 +81,7 @@ function App() {
   };
 
   const saveToLocalStorage = debounce((key, value) => {
-    if (window.localStorage == null) {
+    if (typeof window !== 'undefined' && window.localStorage == null) {
       return;
     }
 
@@ -93,6 +89,19 @@ function App() {
 
     localStorage.setItem(key, savedValue);
   }, 1000);
+
+  const retrieveDefaultValues = () => {
+    const headline = retrieveDefaultHeadline();
+    const items = retrieveDefaultStatusItems();
+    
+    if (headline != null) {
+      setHeadline(retrieveDefaultHeadline());
+    }
+
+    if (items != null && items.length > 0) {
+      setStatusItems(retrieveDefaultStatusItems());
+    }
+  };
 
   const handleChange = (itemIndex, args) => {
     const { key, value } = args;
@@ -166,6 +175,8 @@ function App() {
         handleCopy();
       }
     });
+
+    retrieveDefaultValues();
   }, []);
 
   useEffect(() => {
