@@ -20,20 +20,36 @@ import { sendMessage } from '../services/Slack';
 const initialEmojis = ['🐶', '🐣', '🌸', '🌈', '️🐹', '🦖', '🍒', '🍑', '🥝' , '🍰'];
 const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * initialEmojis.length), 1);
 const initialEmoji = getInitialEmoji()[0];
-const defaultStatusItems = [{ emoji: initialEmoji }];
+
+const DEFAULT_STATUS_ITEMS = [{ emoji: initialEmoji }];
+const DEFAULT_HEADLINE = 'A quick summary...';
 
 const retrieveDefaultStatusItems = () => {
   if (window.localStorage == null) {
-    return defaultStatusItems;
+    return DEFAULT_STATUS_ITEMS;
   }
 
   const items = JSON.parse(localStorage.getItem('cactusStatusItems'));
 
   if (items == null || items.length < 1) {
-    return defaultStatusItems;
+    return DEFAULT_STATUS_ITEMS;
   }
 
   return items;
+}
+
+const retrieveDefaultHeadline = () => {
+  if (window.localStorage == null) {
+    return DEFAULT_HEADLINE;
+  }
+
+  const headline = localStorage.getItem('cactusHeadline');
+
+  if (headline == null) {
+    return DEFAULT_HEADLINE;
+  }
+
+  return headline;
 }
 
 function App() {
@@ -41,7 +57,7 @@ function App() {
   const [ statusItems, setStatusItems ] = useState(retrieveDefaultStatusItems());
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
-  const [ headline, setHeadline ] = useState('A quick summary...');
+  const [ headline, setHeadline ] = useState(retrieveDefaultHeadline());
   const [buttonText, setButtonText] = useState("Post to status")
   const clipboardRef = useRef();
   // Previously, this was randomized via giphy api, but is very rate limiated
@@ -68,13 +84,14 @@ function App() {
     }, `${headline ? `*${headline}*\n\n` : ''}`);
   };
 
-  const saveToLocalStorage = debounce((items) => {
+  const saveToLocalStorage = debounce((key, value) => {
     if (window.localStorage == null) {
       return;
     }
 
-    const value = JSON.stringify(items);
-    localStorage.setItem('cactusStatusItems', value);
+    const savedValue = typeof value === 'object' ? JSON.stringify(value) : value;
+
+    localStorage.setItem(key, savedValue);
   }, 1000);
 
   const handleChange = (itemIndex, args) => {
@@ -86,7 +103,7 @@ function App() {
 
     setStatusItems(items);
     
-    saveToLocalStorage(items);
+    saveToLocalStorage('cactusStatusItems', items);
   };
 
   const handleCopy = async () => {
@@ -165,7 +182,11 @@ function App() {
             placeholder="Your headline"
             value={headline}
             onClick={e => e.currentTarget.select()}
-            onChange={e => setHeadline(e.target.value)} />
+            onChange={e => {
+              const value = e.target.value;
+              setHeadline(value);
+              saveToLocalStorage('cactusHeadline', value);
+            }} />
           
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="droppable">
