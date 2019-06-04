@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import {graphql} from 'gatsby';
+import debounce from 'lodash.debounce';
 
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
@@ -52,6 +53,11 @@ function App() {
     }, `${headline ? `*${headline}*\n\n` : ''}`);
   };
 
+  const saveToLocalStorage = debounce((items) => {
+    const value = JSON.stringify(items);
+    localStorage.setItem('cactusStatusItems', value);
+  }, 2000);
+
   const handleChange = (itemIndex, args) => {
     const { key, value } = args;
     const items = [...statusItems];
@@ -60,6 +66,8 @@ function App() {
     item[key] = value;
 
     setStatusItems(items);
+    
+    saveToLocalStorage(items);
   };
 
   const handleCopy = async () => {
