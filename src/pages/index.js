@@ -20,10 +20,25 @@ import { sendMessage } from '../services/Slack';
 const initialEmojis = ['🐶', '🐣', '🌸', '🌈', '️🐹', '🦖', '🍒', '🍑', '🥝' , '🍰'];
 const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * initialEmojis.length), 1);
 const initialEmoji = getInitialEmoji()[0];
+const defaultStatusItems = [{ emoji: initialEmoji }];
+
+const retrieveDefaultStatusItems = () => {
+  if (window.localStorage == null) {
+    return defaultStatusItems;
+  }
+
+  const items = JSON.parse(localStorage.getItem('cactusStatusItems'));
+
+  if (items == null || items.length < 1) {
+    return defaultStatusItems;
+  }
+
+  return items;
+}
 
 function App() {
   const context = useContext(Context);
-  const [ statusItems, setStatusItems ] = useState([{ emoji: initialEmoji }]);
+  const [ statusItems, setStatusItems ] = useState(retrieveDefaultStatusItems());
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
   const [ headline, setHeadline ] = useState('A quick summary...');
@@ -54,9 +69,13 @@ function App() {
   };
 
   const saveToLocalStorage = debounce((items) => {
+    if (window.localStorage == null) {
+      return;
+    }
+
     const value = JSON.stringify(items);
     localStorage.setItem('cactusStatusItems', value);
-  }, 2000);
+  }, 1000);
 
   const handleChange = (itemIndex, args) => {
     const { key, value } = args;
@@ -154,7 +173,7 @@ function App() {
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}>
-                  { statusItems.map((status, index) => {
+                  { statusItems != null && statusItems.map((status, index) => {
                     return (
                       <StatusItem
                         key={`status-${index}`}

@@ -41,7 +41,7 @@ function StatusItem(props) {
     playPop();
     handleDelete(index);
   }
-
+  
   return (
     <Draggable
       draggableId={`draggable-${index}`}
@@ -62,6 +62,7 @@ function StatusItem(props) {
                 name="title"
                 placeholder="Summary"
                 onChange={handleChange}
+                value={itemData.title}
                 autoComplete="off"
                 autoFocus />
             </div>
@@ -74,6 +75,7 @@ function StatusItem(props) {
               placeholder="A short description"
               height={bodyHeight}
               ref={bodyRef}
+              value={itemData.body}
               onChange={handleChange} />
           </Field>
 
