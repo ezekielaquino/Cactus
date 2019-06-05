@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import {graphql} from 'gatsby';
+import debounce from 'lodash.debounce';
 
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
@@ -20,12 +21,39 @@ const initialEmojis = ['🐶', '🐣', '🌸', '🌈', '️🐹', '🦖', '🍒'
 const getInitialEmoji = () => initialEmojis.splice(Math.floor(Math.random() * initialEmojis.length), 1);
 const initialEmoji = getInitialEmoji()[0];
 
+const DEFAULT_STATUS_ITEMS = [{ emoji: initialEmoji }];
+const DEFAULT_HEADLINE = 'A quick summary...';
+
+const retrieveDefaultStatusItems = () => {
+  if (window.localStorage == null) {
+    return null;
+  }
+
+  const items = JSON.parse(localStorage.getItem('cactusStatusItems'));
+
+  if (items == null || items.length < 1) {
+    return null;
+  }
+
+  return items;
+}
+
+const retrieveDefaultHeadline = () => {
+  if (window.localStorage == null) {
+    return null;
+  }
+
+  const headline = localStorage.getItem('cactusHeadline');
+
+  return headline;
+}
+
 function App() {
   const context = useContext(Context);
-  const [ statusItems, setStatusItems ] = useState([{ emoji: initialEmoji }]);
+  const [ statusItems, setStatusItems ] = useState(DEFAULT_STATUS_ITEMS);
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
-  const [ headline, setHeadline ] = useState('A quick summary...');
+  const [ headline, setHeadline ] = useState(DEFAULT_HEADLINE);
   const [buttonText, setButtonText] = useState("Post to status")
   const clipboardRef = useRef();
   // Previously, this was randomized via giphy api, but is very rate limiated
@@ -52,6 +80,29 @@ function App() {
     }, `${headline ? `*${headline}*\n\n` : ''}`);
   };
 
+  const saveToLocalStorage = debounce((key, value) => {
+    if (typeof window !== 'undefined' && window.localStorage == null) {
+      return;
+    }
+
+    const savedValue = typeof value === 'object' ? JSON.stringify(value) : value;
+
+    localStorage.setItem(key, savedValue);
+  }, 1000);
+
+  const retrieveDefaultValues = () => {
+    const headline = retrieveDefaultHeadline();
+    const items = retrieveDefaultStatusItems();
+    
+    if (headline != null) {
+      setHeadline(retrieveDefaultHeadline());
+    }
+
+    if (items != null && items.length > 0) {
+      setStatusItems(retrieveDefaultStatusItems());
+    }
+  };
+
   const handleChange = (itemIndex, args) => {
     const { key, value } = args;
     const items = [...statusItems];
@@ -60,6 +111,8 @@ function App() {
     item[key] = value;
 
     setStatusItems(items);
+    
+    saveToLocalStorage('cactusStatusItems', items);
   };
 
   const handleCopy = async () => {
@@ -122,6 +175,8 @@ function App() {
         handleCopy();
       }
     });
+
+    retrieveDefaultValues();
   }, []);
 
   useEffect(() => {
@@ -138,7 +193,11 @@ function App() {
             placeholder="Your headline"
             value={headline}
             onClick={e => e.currentTarget.select()}
-            onChange={e => setHeadline(e.target.value)} />
+            onChange={e => {
+              const value = e.target.value;
+              setHeadline(value);
+              saveToLocalStorage('cactusHeadline', value);
+            }} />
           
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="droppable">
@@ -146,7 +205,7 @@ function App() {
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}>
-                  { statusItems.map((status, index) => {
+                  { statusItems != null && statusItems.map((status, index) => {
                     return (
                       <StatusItem
                         key={`status-${index}`}
@@ -165,7 +224,7 @@ function App() {
           </DragDropContext>
 
           <footer>
-            <AddButton onClick={handleAdd}>+</AddButton>
+            <AddButton onClick={handleAdd} title="Add item">+</AddButton>
           </footer>
         </Column>
 
