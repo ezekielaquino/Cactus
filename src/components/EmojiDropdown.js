@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import EmojiPicker from './EmojiPicker';
@@ -17,7 +17,10 @@ function EmojiDropdown(props) {
     selectedEmoji,
     onChange,
   } = props;
+
   const detailsRef = useRef();
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const onPick = emoji => {
     onChange(null, { key: 'emoji', value: emoji.native });
@@ -25,13 +28,18 @@ function EmojiDropdown(props) {
   }
 
   return (
-    <Wrap ref={detailsRef}>
+    <Wrap ref={detailsRef} open={isOpen} onToggle={(event) => {
+      event.preventDefault();
+      setIsOpen(!isOpen);
+    }}>
       <summary>
         { selectedEmoji || 'Emoji' }
       </summary>
 
       <DropdownWrap>
-        <EmojiPicker onSelect={onPick}></EmojiPicker>
+        {isOpen &&
+          <EmojiPicker onSelect={onPick}></EmojiPicker>
+        }
       </DropdownWrap>
     </Wrap>
   )

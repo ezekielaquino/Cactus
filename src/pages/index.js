@@ -210,7 +210,7 @@ function App() {
                       <StatusItem
                         key={`status-${index}`}
                         index={index}
-                        itemData={statusItems[index]}
+                        itemData={status}
                         onChange={handleChange}
                         handleAdd={handleAdd}
                         handleDelete={statusItems.length > 1 && handleDelete} />
