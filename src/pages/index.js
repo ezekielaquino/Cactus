@@ -53,6 +53,7 @@ function App() {
   const [ statusItems, setStatusItems ] = useState(DEFAULT_STATUS_ITEMS);
   const [ result, setResult ] = useState('');
   const [ isCopied, setCopied ] = useState(false);
+  const [ isCopying, setIsCopying ] = useState(false);
   const [ headline, setHeadline ] = useState(DEFAULT_HEADLINE);
   const [buttonText, setButtonText] = useState("Post to status")
   const clipboardRef = useRef();
@@ -116,15 +117,25 @@ function App() {
   };
 
   const handleCopy = async () => {
-    if (navigator.clipboard) {
+    setIsCopying(true);
+
+    if (navigator.clipboard != null) {
       await navigator.clipboard.writeText(result);
     } else {
-      clipboardRef.current.select();
+      const range = document.createRange();
+      range.selectNodeContents(clipboardRef.current);
+
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      clipboardRef.current.setSelectionRange(0, 999999);
+
       document.execCommand('copy');
     }
 
     playPop();
     setCopied(true);
+    setIsCopying(false);
 
     setTimeout(() => {
       setCopied(false);
@@ -142,6 +153,7 @@ function App() {
     if (items.length > 1) {
       items.splice(index, 1);
       setStatusItems(items);
+      saveToLocalStorage('cactusStatusItems', items);
     }
   };
 
@@ -260,7 +272,7 @@ function App() {
           </Success>
         }
 
-        <Clipboard ref={clipboardRef} value={result} readOnly />
+        <Clipboard ref={clipboardRef} value={result} contentEditable={isCopying} readOnly={!isCopying} suppressContentEditableWarning />
       </Wrap>
     </Main>
   )
