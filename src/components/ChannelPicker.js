@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import Select from 'react-select';
 
@@ -13,6 +13,14 @@ function ChannelPicker(props) {
 
   const placeholder = options.length ? 'Select a channel' : 'Loading channels from Slack...';
   const getDefault = options.find(option => option.label === 'status');
+  const getValue = options.find(option => option.value === value);
+
+  // Initially set the default value of the select, React Select quirk.
+  useEffect(() => {
+    const { value, label } = getDefault;
+    onChange(value, label);
+  }, []);
+
   return (
     <>
     <Wrapper>
@@ -22,8 +30,8 @@ function ChannelPicker(props) {
         placeholder={placeholder}
         defaultValue={getDefault}
         options={options}
-        onChange={onChange}
-        currentValue={value}
+        onChange={({ value, label }) => onChange(value, label)}
+        value={getValue}
         />
     </Wrapper>
     </>

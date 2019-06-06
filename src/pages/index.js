@@ -131,9 +131,9 @@ function App() {
     }, 3000);
   };
 
-  const handleChannelChange = e => {
-    context.setSlackChannel(e.value)
-    setButtonText(`Post to ${e.label}`)
+  const handleChannelChange = (value, label) => {
+    context.setSlackChannel(value);
+    setButtonText(`Post to ${label}`)
   }
 
   const handleDelete = index => {
@@ -159,7 +159,8 @@ function App() {
 
   const postToSlack = () => {
     const token = context.slackAccessToken; 
-    const slackChannel = context.slackChannel; 
+    const slackChannel = context.slackChannel;
+    console.log({slackChannel})
     sendMessage(token, slackChannel, result);
     setTimeout(() => {
       setButtonText('💯👌');
@@ -240,7 +241,7 @@ function App() {
                 <ChannelPicker 
                   channels={context.channels}
                   value={context.slackChannel}  
-                  onChange={e => handleChannelChange(e)}
+                  onChange={handleChannelChange}
                 />
                 <TestButton onClick={postToSlack}>{buttonText}</TestButton>
               </>
