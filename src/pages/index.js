@@ -160,7 +160,6 @@ function App() {
   const postToSlack = () => {
     const token = context.slackAccessToken; 
     const slackChannel = context.slackChannel;
-    console.log({slackChannel})
     sendMessage(token, slackChannel, result);
     setTimeout(() => {
       setButtonText('💯👌');
